@@ -1,18 +1,22 @@
 import Ember from 'ember';
 import config from '../config/environment';
 
+export function getGlobalName() {
+  const value = config.exportApplicationGlobal;
+  let name;
+
+  if (typeof value === 'string') {
+    name = value;
+  } else {
+    name = Ember.String.classify(config.modulePrefix);
+  }
+  return name;
+}
+
 export function initialize() {
   var application = arguments[1] || arguments[0];
   if (config.exportApplicationGlobal !== false) {
-    var value = config.exportApplicationGlobal;
-    var globalName;
-
-    if (typeof value === 'string') {
-      globalName = value;
-    } else {
-      globalName = Ember.String.classify(config.modulePrefix);
-    }
-
+    const globalName = getGlobalName();
     if (!window[globalName]) {
       window[globalName] = application;
 
